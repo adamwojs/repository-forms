@@ -289,8 +289,8 @@
         <jms:reference-file line="26">lib/FieldType/Mapper/FloatFormMapper.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="5b275c762831def3c6ea393e3e0c25762e0844b3" resname="field_definition.ezimage.max_file_size">
-        <source>Maximum file size (byte)</source>
-        <target>Maximum file size (byte)</target>
+        <source>Maximum file size (MB)</source>
+        <target>Maximum file size (MB)</target>
         <note>key: field_definition.ezimage.max_file_size</note>
         <jms:reference-file line="25">lib/FieldType/Mapper/ImageFormMapper.php</jms:reference-file>
       </trans-unit>
