@@ -56,6 +56,19 @@ class UniqueContentTypeIdentifierValidatorTest extends PHPUnit_Framework_TestCas
         $this->validator->validate($value, new UniqueContentTypeIdentifier());
     }
 
+    public function testEmptyRoleIdentifier()
+    {
+        $value = new ContentTypeData(['identifier' => '']);
+        $this->contentTypeService
+            ->expects($this->never())
+            ->method('loadContentTypeByIdentifier');
+        $this->executionContext
+            ->expects($this->never())
+            ->method('buildViolation');
+
+        $this->validator->validate($value, new UniqueContentTypeIdentifier());
+    }
+
     public function testValid()
     {
         $identifier = 'foo_identifier';
