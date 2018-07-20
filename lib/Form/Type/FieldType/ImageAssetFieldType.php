@@ -10,6 +10,7 @@ namespace EzSystems\RepositoryForms\Form\Type\FieldType;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\LocationService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,14 +23,21 @@ class ImageAssetFieldType extends AbstractType
     /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
+    /** @var \eZ\Publish\API\Repository\LocationService */
+    private $locationService;
+
     /**
      * ImageAssetFieldType constructor.
      *
      * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
      */
-    public function __construct(ContentService $contentService)
-    {
+    public function __construct(
+        ContentService $contentService,
+        LocationService $locationService
+    ) {
         $this->contentService = $contentService;
+        $this->locationService = $locationService;
     }
 
     public function getName()
@@ -59,6 +67,7 @@ class ImageAssetFieldType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $image = null;
+        $defaultLocationPath = null;
 
         if ($view->vars['value']['destinationContentId']) {
             try {
@@ -71,7 +80,13 @@ class ImageAssetFieldType extends AbstractType
                 // FIXME: Ignored exception
             }
         }
-
+        if ($view->parent->vars['value']->fieldDefinition->fieldSettings['selectionDefaultLocation']) {
+            $targetLocation = $this->locationService->loadLocation(
+                $view->parent->vars['value']->fieldDefinition->fieldSettings['selectionDefaultLocation']
+            );
+            $defaultLocationPath = rtrim($targetLocation->pathString, '/');
+        }
+        $view->vars['default_location_path'] = $defaultLocationPath;
         $view->vars['image'] = $image;
     }
 
