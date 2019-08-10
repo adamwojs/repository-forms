@@ -78,30 +78,48 @@ final class UserAccountFieldValueFormMapper implements FieldValueFormMapperInter
      */
     public function mapFieldDefinitionForm(FormInterface $fieldDefinitionForm, FieldDefinitionData $data)
     {
-        $propertyPathPrefix = 'validatorConfiguration[PasswordValueValidator]';
+        $validatorPropertyPathPrefix = 'validatorConfiguration[PasswordValueValidator]';
 
         $fieldDefinitionForm->add('requireAtLeastOneUpperCaseCharacter', PasswordConstraintCheckboxType::class, [
-            'property_path' => $propertyPathPrefix . '[requireAtLeastOneUpperCaseCharacter]',
+            'property_path' => $validatorPropertyPathPrefix . '[requireAtLeastOneUpperCaseCharacter]',
         ]);
 
         $fieldDefinitionForm->add('requireAtLeastOneLowerCaseCharacter', PasswordConstraintCheckboxType::class, [
-            'property_path' => $propertyPathPrefix . '[requireAtLeastOneLowerCaseCharacter]',
+            'property_path' => $validatorPropertyPathPrefix . '[requireAtLeastOneLowerCaseCharacter]',
         ]);
 
         $fieldDefinitionForm->add('requireAtLeastOneNumericCharacter', PasswordConstraintCheckboxType::class, [
-            'property_path' => $propertyPathPrefix . '[requireAtLeastOneNumericCharacter]',
+            'property_path' => $validatorPropertyPathPrefix . '[requireAtLeastOneNumericCharacter]',
         ]);
 
         $fieldDefinitionForm->add('requireAtLeastOneNonAlphanumericCharacter', PasswordConstraintCheckboxType::class, [
-            'property_path' => $propertyPathPrefix . '[requireAtLeastOneNonAlphanumericCharacter]',
+            'property_path' => $validatorPropertyPathPrefix . '[requireAtLeastOneNonAlphanumericCharacter]',
         ]);
 
         $fieldDefinitionForm->add('minLength', IntegerType::class, [
             'required' => false,
-            'property_path' => $propertyPathPrefix . '[minLength]',
+            'property_path' => $validatorPropertyPathPrefix . '[minLength]',
             'label' => 'field_definition.ezuser.min_length',
             'constraints' => [
                 new Range(['min' => 0, 'max' => 255]),
+            ],
+        ]);
+
+        $fieldDefinitionForm->add('passwordExpireAfter', IntegerType::class, [
+            'required' => false,
+            'property_path' => 'fieldSettings[PasswordExpireAfter]',
+            'label' => 'field_definition.ezuser.password_expire_after',
+            'constraints' => [
+                new Range(['min' => -1, 'max' => 365]),
+            ],
+        ]);
+
+        $fieldDefinitionForm->add('passwordWarnBefore', IntegerType::class, [
+            'required' => false,
+            'property_path' => 'fieldSettings[PasswordWarnBefore]',
+            'label' => 'field_definition.ezuser.password_warn_before',
+            'constraints' => [
+                new Range(['min' => -1, 'max' => 90]),
             ],
         ]);
     }
